@@ -1,5 +1,6 @@
 package com.example.managementsystemapi.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -12,14 +13,18 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CustomerRequestDTO {
-    
+
+    @Schema(example = "John Doe")
     @NotBlank
     private String name;
 
+    @Schema(example = "john.doe@email.com")
     @Email
     private String email;
 
+    @Schema(example = "19999999999")
     private String phone;
 
+    @Schema(example = "12345678900")
     private String document;
 }
