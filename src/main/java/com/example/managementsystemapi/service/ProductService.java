@@ -11,10 +11,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
+@Transactional
 public class ProductService {
 
     private static final Logger log = LoggerFactory.getLogger(ProductService.class);
@@ -49,6 +51,7 @@ public class ProductService {
         return mapper.toDTO(repository.save(product));
     }
 
+    @Transactional(readOnly = true)
     public Page<ProductResponseDTO> findAll(final Pageable pageable) {
 
         log.info("Fetching products - page: {}, size: {}", pageable.getPageNumber(), pageable.getPageSize());
@@ -57,6 +60,7 @@ public class ProductService {
                 .map(mapper::toDTO);
     }
 
+    @Transactional(readOnly = true)
     public Optional<ProductResponseDTO> findOne(final Long id) {
 
         log.info("Fetching product by id: {}", id);
