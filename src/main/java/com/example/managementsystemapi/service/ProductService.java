@@ -70,6 +70,12 @@ public class ProductService {
                 .map(mapper::toDTO);
     }
 
+    public Product findOrThrow(final Long productId) {
+
+        return repository.findById(productId)
+                .orElseThrow(() -> new NotFoundException("Product not found - id: " + productId));
+    }
+
     public Optional<ProductResponseDTO> disable(final Long id) {
 
         log.info("Disabling product - id: {}", id);
