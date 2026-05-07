@@ -3,7 +3,10 @@ package com.example.managementsystemapi.service;
 import com.example.managementsystemapi.domain.Product;
 import com.example.managementsystemapi.domain.Stock;
 import com.example.managementsystemapi.domain.StockMovement;
-import com.example.managementsystemapi.dto.*;
+import com.example.managementsystemapi.dto.StockEntryRequestDTO;
+import com.example.managementsystemapi.dto.StockExitRequestDTO;
+import com.example.managementsystemapi.dto.StockMovementResponseDTO;
+import com.example.managementsystemapi.dto.StockResponseDTO;
 import com.example.managementsystemapi.enums.MovementType;
 import com.example.managementsystemapi.exception.NotFoundException;
 import com.example.managementsystemapi.mapper.StockMapper;
@@ -69,6 +72,16 @@ public class StockService {
     }
 
     @Transactional
+    public void registerEntry(Long productId, Integer quantity, String reason) {
+        applyMovement(
+                productId,
+                MovementType.ENTRY,
+                quantity,
+                reason
+        );
+    }
+
+    @Transactional
     public StockMovementResponseDTO registerManualExit(Long productId, StockExitRequestDTO request) {
         return applyMovement(
                 productId,
@@ -79,12 +92,12 @@ public class StockService {
     }
 
     @Transactional
-    public StockMovementResponseDTO registerSaleExit(Long productId, SaleExitRequestDTO request) {
-        return applyMovement(
+    public void registerSaleExit(Long productId, Long saleId, Integer quantity) {
+        applyMovement(
                 productId,
                 MovementType.SALE_EXIT,
-                request.getQuantity(),
-                "Automatic exit on sale " + request.getSaleId()
+                quantity,
+                "Automatic exit on sale " + saleId
         );
     }
 

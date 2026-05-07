@@ -66,6 +66,12 @@ public class CustomerService {
                 .map(mapper::toDTO);
     }
 
+    public Customer findOrThrow(final Long id) {
+
+        return repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Customer not found - id: " + id));
+    }
+
     public Optional<CustomerResponseDTO> disable(final Long id) {
 
         log.info("Disabling customer - id: {}", id);
