@@ -70,10 +70,10 @@ public class ProductService {
                 .map(mapper::toDTO);
     }
 
-    public Product findOrThrow(final Long productId) {
+    public Product findOrThrow(final Long id) {
 
-        return repository.findById(productId)
-                .orElseThrow(() -> new NotFoundException("Product not found - id: " + productId));
+        return repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Product not found - id: " + id));
     }
 
     public Optional<ProductResponseDTO> disable(final Long id) {
