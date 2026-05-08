@@ -3,9 +3,7 @@ package com.example.managementsystemapi.domain;
 import com.example.managementsystemapi.enums.MovementType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.util.Assert;
 
@@ -16,7 +14,6 @@ import org.springframework.util.Assert;
 })
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StockMovement extends BaseEntity {
 
     @Id
