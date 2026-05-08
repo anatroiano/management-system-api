@@ -1,6 +1,7 @@
 package com.example.managementsystemapi.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,13 @@ public class Product extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
+    @Size(max = 100)
+    @Column(nullable = false, length = 100)
+    private String code;
+
+    @NotBlank
+    @Size(max = 255)
     @Column(nullable = false)
     private String name;
 

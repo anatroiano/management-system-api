@@ -2,6 +2,7 @@ package com.example.managementsystemapi.domain;
 
 import com.example.managementsystemapi.enums.MovementType;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,7 +34,7 @@ public class StockMovement extends BaseEntity {
     @Column(nullable = false)
     private Integer quantity;
 
-    @Column(length = 255)
+    @Size(max = 500)
     private String reason;
 
     public static StockMovement of(

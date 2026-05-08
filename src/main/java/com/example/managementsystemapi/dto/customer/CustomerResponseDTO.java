@@ -1,4 +1,4 @@
-package com.example.managementsystemapi.dto;
+package com.example.managementsystemapi.dto.customer;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

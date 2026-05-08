@@ -16,5 +16,4 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
     @Query("SELECT s FROM Stock s WHERE s.product.id = :productId")
     Optional<Stock> findByProductIdForUpdate(Long productId);
 
-    boolean existsByProductId(Long productId);
 }

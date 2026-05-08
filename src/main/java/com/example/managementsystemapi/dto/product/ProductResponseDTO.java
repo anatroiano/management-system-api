@@ -1,4 +1,4 @@
-package com.example.managementsystemapi.dto;
+package com.example.managementsystemapi.dto.product;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 public class ProductResponseDTO {
 
     private Long id;
+
+    private String code;
 
     private String name;
 

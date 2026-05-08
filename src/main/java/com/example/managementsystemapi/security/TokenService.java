@@ -18,11 +18,11 @@ public class TokenService {
     @Value("${api.security.token.secret}")
     private String secret;
 
-    public String generateToken(final User user) {
+    public String generateToken(User user) {
 
         try {
 
-            final Algorithm algorithm = Algorithm.HMAC256(secret);
+            Algorithm algorithm = Algorithm.HMAC256(secret);
 
             return JWT.create()
                     .withIssuer("management-system-api")
@@ -36,11 +36,11 @@ public class TokenService {
 
     }
 
-    public String validateToken(final String token) {
+    public String validateToken(String token) {
 
         try {
 
-            final Algorithm algorithm = Algorithm.HMAC256(secret);
+            Algorithm algorithm = Algorithm.HMAC256(secret);
 
             return JWT.require(algorithm)
                     .withIssuer("management-system-api")

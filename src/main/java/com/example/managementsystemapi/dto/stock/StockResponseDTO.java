@@ -1,6 +1,5 @@
-package com.example.managementsystemapi.dto;
+package com.example.managementsystemapi.dto.stock;
 
-import com.example.managementsystemapi.enums.MovementType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,19 +11,15 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StockMovementResponseDTO {
+public class StockResponseDTO {
 
     private Long id;
 
     private Long productId;
 
-    private MovementType type;
-
     private Integer quantity;
 
-    private String reason;
-
-    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
 
 }

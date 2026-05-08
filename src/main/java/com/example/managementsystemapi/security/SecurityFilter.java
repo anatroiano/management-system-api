@@ -27,16 +27,16 @@ public class SecurityFilter extends OncePerRequestFilter {
     UserRepository userRepository;
 
     @Override
-    protected void doFilterInternal(final @Nonnull HttpServletRequest request, final @Nonnull HttpServletResponse response, final @Nonnull FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response, @Nonnull FilterChain filterChain) throws ServletException, IOException {
 
-        final var token = this.recoverToken(request);
+        var token = this.recoverToken(request);
 
-        final var login = tokenService.validateToken(token);
+        var login = tokenService.validateToken(token);
 
         if (login != null) {
-            final User user = userRepository.findByEmail(login).orElseThrow(() -> new RuntimeException("User not found."));
-            final var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
-            final var authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
+            User user = userRepository.findByEmail(login).orElseThrow(() -> new RuntimeException("User not found."));
+            var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+            var authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
@@ -46,7 +46,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     private String recoverToken(HttpServletRequest request) {
 
-        final var authHeader = request.getHeader("Authorization");
+        var authHeader = request.getHeader("Authorization");
 
         if (authHeader == null) return null;
 

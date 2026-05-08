@@ -1,7 +1,7 @@
 package com.example.managementsystemapi.controller;
 
-import com.example.managementsystemapi.dto.CreateSaleRequestDTO;
-import com.example.managementsystemapi.dto.SaleResponseDTO;
+import com.example.managementsystemapi.dto.sale.CreateSaleRequestDTO;
+import com.example.managementsystemapi.dto.sale.SaleResponseDTO;
 import com.example.managementsystemapi.service.SaleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,8 +34,8 @@ public class SaleController {
             @ApiResponse(responseCode = "400", description = "Insufficient stock")
     })
     @PostMapping
-    public SaleResponseDTO create(@RequestBody @Valid CreateSaleRequestDTO request) {
-        return service.create(request);
+    public ResponseEntity<SaleResponseDTO> create(@RequestBody @Valid CreateSaleRequestDTO request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(request));
     }
 
     @Operation(
@@ -46,8 +47,10 @@ public class SaleController {
             @ApiResponse(responseCode = "404", description = "Sale not found")
     })
     @GetMapping("/{id}")
-    public SaleResponseDTO findOne(@PathVariable Long id) {
-        return service.findOne(id);
+    public ResponseEntity<SaleResponseDTO> getOne(@PathVariable Long id) {
+        return service.findOne(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @Operation(
@@ -56,7 +59,7 @@ public class SaleController {
     )
     @ApiResponse(responseCode = "200", description = "Sales retrieved successfully")
     @GetMapping
-    public ResponseEntity<Page<SaleResponseDTO>> getAll(final @ParameterObject Pageable pageable) {
+    public ResponseEntity<Page<SaleResponseDTO>> getAll(@ParameterObject Pageable pageable) {
 
         return ResponseEntity.ok(service.findAll(pageable));
     }

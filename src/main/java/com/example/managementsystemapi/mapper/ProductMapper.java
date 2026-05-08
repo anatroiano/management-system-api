@@ -1,8 +1,8 @@
 package com.example.managementsystemapi.mapper;
 
 import com.example.managementsystemapi.domain.Product;
-import com.example.managementsystemapi.dto.ProductRequestDTO;
-import com.example.managementsystemapi.dto.ProductResponseDTO;
+import com.example.managementsystemapi.dto.product.ProductRequestDTO;
+import com.example.managementsystemapi.dto.product.ProductResponseDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 

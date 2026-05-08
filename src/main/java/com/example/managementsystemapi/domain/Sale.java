@@ -26,8 +26,10 @@ public class Sale extends BaseEntity {
     private Customer customer;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private SaleStatus status;
 
+    @Column(nullable = false)
     private BigDecimal totalAmount;
 
     @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL)
