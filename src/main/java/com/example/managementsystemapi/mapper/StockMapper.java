@@ -1,7 +1,7 @@
 package com.example.managementsystemapi.mapper;
 
 import com.example.managementsystemapi.domain.Stock;
-import com.example.managementsystemapi.dto.StockResponseDTO;
+import com.example.managementsystemapi.dto.stock.StockResponseDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

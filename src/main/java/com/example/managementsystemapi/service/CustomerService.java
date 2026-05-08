@@ -1,20 +1,24 @@
 package com.example.managementsystemapi.service;
 
 import com.example.managementsystemapi.domain.Customer;
-import com.example.managementsystemapi.dto.CustomerRequestDTO;
-import com.example.managementsystemapi.dto.CustomerResponseDTO;
+import com.example.managementsystemapi.dto.customer.CustomerRequestDTO;
+import com.example.managementsystemapi.dto.customer.CustomerResponseDTO;
 import com.example.managementsystemapi.exception.NotFoundException;
 import com.example.managementsystemapi.mapper.CustomerMapper;
 import com.example.managementsystemapi.repository.CustomerRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class CustomerService {
 
     private static final Logger log = LoggerFactory.getLogger(CustomerService.class);
@@ -22,26 +26,20 @@ public class CustomerService {
     private final CustomerRepository repository;
     private final CustomerMapper mapper;
 
-    public CustomerService(final CustomerRepository repository,
-                           final CustomerMapper mapper) {
-        this.repository = repository;
-        this.mapper = mapper;
-    }
-
-    public CustomerResponseDTO create(final CustomerRequestDTO dto) {
+    public CustomerResponseDTO create(CustomerRequestDTO dto) {
 
         log.info("Creating new customer");
 
-        final Customer customer = mapper.toEntity(dto);
+        Customer customer = mapper.toEntity(dto);
 
         return mapper.toDTO(repository.save(customer));
     }
 
-    public CustomerResponseDTO update(final Long id, final CustomerRequestDTO dto) {
+    public CustomerResponseDTO update(Long id, CustomerRequestDTO dto) {
 
         log.info("Updating customer - id: {}", id);
 
-        final Customer customer = repository.findById(id)
+        Customer customer = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Customer not found - id: " + id));
 
         mapper.updateEntity(customer, dto);
@@ -49,7 +47,8 @@ public class CustomerService {
         return mapper.toDTO(repository.save(customer));
     }
 
-    public Page<CustomerResponseDTO> findAll(final Pageable pageable) {
+    @Transactional(readOnly = true)
+    public Page<CustomerResponseDTO> findAll(Pageable pageable) {
 
         log.info("Fetching customers - page: {}, size: {}", pageable.getPageNumber(), pageable.getPageSize());
 
@@ -57,7 +56,8 @@ public class CustomerService {
                 .map(mapper::toDTO);
     }
 
-    public Optional<CustomerResponseDTO> findOne(final Long id) {
+    @Transactional(readOnly = true)
+    public Optional<CustomerResponseDTO> findOne(Long id) {
 
         log.info("Fetching customer by id: {}", id);
 
@@ -66,13 +66,14 @@ public class CustomerService {
                 .map(mapper::toDTO);
     }
 
-    public Customer findOrThrow(final Long id) {
+    @Transactional(readOnly = true)
+    public Customer findOrThrow(Long id) {
 
         return repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Customer not found - id: " + id));
     }
 
-    public Optional<CustomerResponseDTO> disable(final Long id) {
+    public Optional<CustomerResponseDTO> disable(Long id) {
 
         log.info("Disabling customer - id: {}", id);
 

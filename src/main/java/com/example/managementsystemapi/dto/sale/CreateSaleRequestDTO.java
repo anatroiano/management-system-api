@@ -1,4 +1,4 @@
-package com.example.managementsystemapi.dto;
+package com.example.managementsystemapi.dto.sale;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;

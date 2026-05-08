@@ -4,9 +4,9 @@ import com.example.managementsystemapi.domain.Customer;
 import com.example.managementsystemapi.domain.Product;
 import com.example.managementsystemapi.domain.Sale;
 import com.example.managementsystemapi.domain.SaleItem;
-import com.example.managementsystemapi.dto.CreateSaleItemRequestDTO;
-import com.example.managementsystemapi.dto.CreateSaleRequestDTO;
-import com.example.managementsystemapi.dto.SaleResponseDTO;
+import com.example.managementsystemapi.dto.sale.CreateSaleItemRequestDTO;
+import com.example.managementsystemapi.dto.sale.CreateSaleRequestDTO;
+import com.example.managementsystemapi.dto.sale.SaleResponseDTO;
 import com.example.managementsystemapi.enums.SaleStatus;
 import com.example.managementsystemapi.exception.NotFoundException;
 import com.example.managementsystemapi.mapper.SaleMapper;
@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,11 +30,11 @@ public class SaleService {
 
     private static final Logger log = LoggerFactory.getLogger(SaleService.class);
 
-    private final SaleRepository saleRepository;
+    private final SaleRepository repository;
     private final CustomerService customerService;
     private final ProductService productService;
     private final StockService stockService;
-    private final SaleMapper saleMapper;
+    private final SaleMapper mapper;
 
     public SaleResponseDTO create(CreateSaleRequestDTO request) {
 
@@ -52,21 +53,23 @@ public class SaleService {
 
         items.forEach(item -> item.setSale(sale));
 
-        Sale savedSale = saleRepository.save(sale);
+        Sale savedSale = repository.save(sale);
 
         processStockOutput(savedSale, items);
 
         log.info("Sale created successfully - id: {}", savedSale.getId());
 
-        return saleMapper.toDTO(savedSale);
+        return mapper.toDTO(savedSale);
     }
 
     @Transactional(readOnly = true)
-    public SaleResponseDTO findOne(Long id) {
+    public Optional<SaleResponseDTO> findOne(Long id) {
 
         log.info("Fetching sale by id: {}", id);
 
-        return saleMapper.toDTO(findOrThrow(id));
+        return repository.findById(id)
+                .filter(Sale::getActive)
+                .map(mapper::toDTO);
     }
 
     @Transactional(readOnly = true)
@@ -74,8 +77,8 @@ public class SaleService {
 
         log.info("Fetching sales - page: {}, size: {}", pageable.getPageNumber(), pageable.getPageSize());
 
-        return saleRepository.findAll(pageable)
-                .map(saleMapper::toDTO);
+        return repository.findAll(pageable)
+                .map(mapper::toDTO);
     }
 
     public SaleResponseDTO cancel(Long id) {
@@ -95,16 +98,16 @@ public class SaleService {
 
         sale.setStatus(SaleStatus.CANCELED);
 
-        Sale canceledSale = saleRepository.save(sale);
+        Sale canceledSale = repository.save(sale);
 
         log.info("Sale canceled successfully - id: {}", id);
 
-        return saleMapper.toDTO(canceledSale);
+        return mapper.toDTO(canceledSale);
     }
 
     public Sale findOrThrow(Long id) {
 
-        return saleRepository.findById(id)
+        return repository.findById(id)
                 .orElseThrow(() -> {
                     log.warn("Sale not found - id: {}", id);
 

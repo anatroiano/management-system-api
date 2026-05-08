@@ -1,11 +1,12 @@
 package com.example.managementsystemapi.service;
 
 import com.example.managementsystemapi.domain.Product;
-import com.example.managementsystemapi.dto.ProductRequestDTO;
-import com.example.managementsystemapi.dto.ProductResponseDTO;
+import com.example.managementsystemapi.dto.product.ProductRequestDTO;
+import com.example.managementsystemapi.dto.product.ProductResponseDTO;
 import com.example.managementsystemapi.exception.NotFoundException;
 import com.example.managementsystemapi.mapper.ProductMapper;
 import com.example.managementsystemapi.repository.ProductRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ProductService {
 
     private static final Logger log = LoggerFactory.getLogger(ProductService.class);
@@ -24,26 +26,20 @@ public class ProductService {
     private final ProductRepository repository;
     private final ProductMapper mapper;
 
-    public ProductService(final ProductRepository repository,
-                          final ProductMapper mapper) {
-        this.repository = repository;
-        this.mapper = mapper;
-    }
-
-    public ProductResponseDTO create(final ProductRequestDTO dto) {
+    public ProductResponseDTO create(ProductRequestDTO dto) {
 
         log.info("Creating new product");
 
-        final Product product = mapper.toEntity(dto);
+        Product product = mapper.toEntity(dto);
 
         return mapper.toDTO(repository.save(product));
     }
 
-    public ProductResponseDTO update(final Long id, final ProductRequestDTO dto) {
+    public ProductResponseDTO update(Long id, ProductRequestDTO dto) {
 
         log.info("Updating product - id: {}", id);
 
-        final Product product = repository.findById(id)
+        Product product = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Product not found - id: " + id));
 
         mapper.updateEntity(product, dto);
@@ -52,7 +48,7 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ProductResponseDTO> findAll(final Pageable pageable) {
+    public Page<ProductResponseDTO> findAll(Pageable pageable) {
 
         log.info("Fetching products - page: {}, size: {}", pageable.getPageNumber(), pageable.getPageSize());
 
@@ -61,7 +57,7 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<ProductResponseDTO> findOne(final Long id) {
+    public Optional<ProductResponseDTO> findOne(Long id) {
 
         log.info("Fetching product by id: {}", id);
 
@@ -70,13 +66,13 @@ public class ProductService {
                 .map(mapper::toDTO);
     }
 
-    public Product findOrThrow(final Long id) {
+    public Product findOrThrow(Long id) {
 
         return repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Product not found - id: " + id));
     }
 
-    public Optional<ProductResponseDTO> disable(final Long id) {
+    public Optional<ProductResponseDTO> disable(Long id) {
 
         log.info("Disabling product - id: {}", id);
 

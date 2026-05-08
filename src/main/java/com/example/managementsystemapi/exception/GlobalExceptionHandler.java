@@ -76,4 +76,16 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now()
         );
     }
+
+    @ExceptionHandler(BusinessException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleBusinessException(BusinessException ex) {
+
+        return new ApiError(
+                HttpStatus.BAD_REQUEST.value(),
+                "Business rule violation",
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+    }
 }

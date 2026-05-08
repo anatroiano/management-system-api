@@ -1,4 +1,4 @@
-package com.example.managementsystemapi.dto;
+package com.example.managementsystemapi.dto.auth;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

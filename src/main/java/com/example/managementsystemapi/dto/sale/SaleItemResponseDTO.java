@@ -1,23 +1,26 @@
-package com.example.managementsystemapi.dto;
+package com.example.managementsystemapi.dto.sale;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateSaleItemRequestDTO {
+public class SaleItemResponseDTO {
 
-    @NotNull
+    private Long id;
+
     private Long productId;
 
-    @NotNull
-    @Min(1)
     private Integer quantity;
+
+    private BigDecimal unitPrice;
+
+    private BigDecimal subtotal;
 
 }

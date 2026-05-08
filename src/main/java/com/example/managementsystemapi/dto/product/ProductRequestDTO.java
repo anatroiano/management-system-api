@@ -1,4 +1,4 @@
-package com.example.managementsystemapi.dto;
+package com.example.managementsystemapi.dto.product;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -16,6 +16,11 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductRequestDTO {
+
+    @NotBlank
+    @Size(max = 100)
+    @Schema(description = "Product code", example = "ABC123")
+    private String code;
 
     @NotBlank
     @Schema(description = "Product name", example = "Wireless Mouse")

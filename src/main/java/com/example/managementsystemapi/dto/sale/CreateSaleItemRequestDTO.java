@@ -1,5 +1,6 @@
-package com.example.managementsystemapi.dto;
+package com.example.managementsystemapi.dto.sale;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,9 +11,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateStockRequestDTO {
+public class CreateSaleItemRequestDTO {
 
     @NotNull
     private Long productId;
+
+    @NotNull
+    @Min(1)
+    private Integer quantity;
 
 }

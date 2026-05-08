@@ -26,10 +26,13 @@ public class SaleItem {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @Column(nullable = false)
     private Integer quantity;
 
+    @Column(nullable = false)
     private BigDecimal unitPrice;
 
+    @Column(nullable = false)
     private BigDecimal subtotal;
 
 }

@@ -1,6 +1,6 @@
 package com.example.managementsystemapi.controller;
 
-import com.example.managementsystemapi.dto.*;
+import com.example.managementsystemapi.dto.stock.*;
 import com.example.managementsystemapi.enums.MovementType;
 import com.example.managementsystemapi.service.StockService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +14,8 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Stock", description = "Operations related to stock management and movements")
@@ -22,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class StockController {
 
-    private final StockService stockService;
+    private final StockService service;
 
     @Operation(
             summary = "Create stock for a product",
@@ -33,8 +35,8 @@ public class StockController {
             @ApiResponse(responseCode = "404", description = "Product not found")
     })
     @PostMapping
-    public StockResponseDTO create(@RequestBody @Valid CreateStockRequestDTO request) {
-        return stockService.createStockIfNotExists(request.getProductId());
+    public ResponseEntity<StockResponseDTO> create(@RequestBody @Valid CreateStockRequestDTO request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.createStockIfNotExists(request.getProductId()));
     }
 
     @Operation(
@@ -47,7 +49,7 @@ public class StockController {
     })
     @GetMapping("/{productId}")
     public StockResponseDTO getByProduct(@Parameter(description = "Product ID") @PathVariable Long productId) {
-        return stockService.getByProduct(productId);
+        return service.getByProduct(productId);
     }
 
     @Operation(
@@ -66,7 +68,7 @@ public class StockController {
             @ParameterObject
             @PageableDefault(size = 20, sort = "createdAt") Pageable pageable
     ) {
-        return stockService.getHistory(productId, type, pageable);
+        return service.getHistory(productId, type, pageable);
     }
 
     @Operation(
@@ -83,7 +85,7 @@ public class StockController {
             @Parameter(description = "Product ID") @PathVariable Long productId,
             @RequestBody @Valid StockEntryRequestDTO request
     ) {
-        return stockService.registerEntry(productId, request);
+        return service.registerEntry(productId, request);
     }
 
     @Operation(
@@ -101,6 +103,6 @@ public class StockController {
             @Parameter(description = "Product ID") @PathVariable Long productId,
             @RequestBody @Valid StockExitRequestDTO request
     ) {
-        return stockService.registerManualExit(productId, request);
+        return service.registerManualExit(productId, request);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.managementsystemapi.dto;
+package com.example.managementsystemapi.dto.sale;
 
 import com.example.managementsystemapi.enums.SaleStatus;
 import lombok.AllArgsConstructor;

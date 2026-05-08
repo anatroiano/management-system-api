@@ -1,11 +1,9 @@
 package com.example.managementsystemapi.controller;
 
-import com.example.managementsystemapi.domain.User;
-import com.example.managementsystemapi.dto.LoginRequestDTO;
-import com.example.managementsystemapi.dto.LoginResponseDTO;
-import com.example.managementsystemapi.dto.RegisterRequestDTO;
-import com.example.managementsystemapi.repository.UserRepository;
-import com.example.managementsystemapi.security.TokenService;
+import com.example.managementsystemapi.dto.auth.LoginRequestDTO;
+import com.example.managementsystemapi.dto.auth.LoginResponseDTO;
+import com.example.managementsystemapi.dto.auth.RegisterRequestDTO;
+import com.example.managementsystemapi.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -15,13 +13,10 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 @Tag(name = "Authentication", description = "Authentication and user registration")
 @RestController
@@ -29,9 +24,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final TokenService tokenService;
+    private final AuthService authService;
 
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
 
@@ -45,14 +38,7 @@ public class AuthController {
 
         log.info("Login attempt for email: {}", body.getEmail());
 
-        final User user = userRepository.findByEmail(body.getEmail()).orElseThrow(() -> new RuntimeException("User not found."));
-
-        if (passwordEncoder.matches(body.getPassword(), user.getPassword())) {
-            final String token = tokenService.generateToken(user);
-            return ResponseEntity.ok(new LoginResponseDTO(user.getName(), token));
-        }
-        return ResponseEntity.badRequest().build();
-
+        return ResponseEntity.ok(authService.login(body));
     }
 
     @Operation(summary = "Register new user")
@@ -65,22 +51,6 @@ public class AuthController {
 
         log.info("Register attempt for email: {}", body.getEmail());
 
-        final Optional<User> user = userRepository.findByEmail(body.getEmail());
-
-        if (user.isEmpty()) {
-            final User newUser = new User();
-            newUser.setName(body.getName());
-            newUser.setEmail(body.getEmail());
-            newUser.setPassword(passwordEncoder.encode(body.getPassword()));
-            userRepository.save(newUser);
-
-            final String token = tokenService.generateToken(newUser);
-            return ResponseEntity.ok(new LoginResponseDTO(newUser.getName(), token));
-
-        }
-
-        return ResponseEntity.badRequest().build();
-
+        return ResponseEntity.ok(authService.register(body));
     }
-
 }
