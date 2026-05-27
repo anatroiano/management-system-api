@@ -176,4 +176,13 @@ public class StockService {
                         "Stock not found for product id: " + productId
                 ));
     }
+
+    @Transactional(readOnly = true)
+    public Page<StockResponseDTO> findAll(Pageable pageable) {
+
+        log.info("Fetching stocks - page: {}, size: {}", pageable.getPageNumber(), pageable.getPageSize());
+
+        return repository.findByActiveIsTrue(pageable)
+                .map(mapper::toDTO);
+    }
 }

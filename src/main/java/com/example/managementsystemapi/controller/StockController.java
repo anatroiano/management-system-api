@@ -105,4 +105,15 @@ public class StockController {
     ) {
         return service.registerManualExit(productId, request);
     }
+
+    @Operation(
+            summary = "List stocks",
+            description = "Returns a paginated list of active stocks"
+    )
+    @GetMapping
+    public ResponseEntity<Page<StockResponseDTO>> getAll(@ParameterObject Pageable pageable) {
+
+        return ResponseEntity.ok(service.findAll(pageable));
+    }
+
 }
