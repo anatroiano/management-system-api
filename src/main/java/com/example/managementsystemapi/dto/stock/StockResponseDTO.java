@@ -17,6 +17,10 @@ public class StockResponseDTO {
 
     private Long productId;
 
+    private String productCode;
+
+    private String productName;
+
     private Integer quantity;
 
     private LocalDateTime updatedAt;
