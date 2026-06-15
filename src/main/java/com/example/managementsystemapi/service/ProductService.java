@@ -52,7 +52,7 @@ public class ProductService {
 
         log.info("Fetching products - page: {}, size: {}", pageable.getPageNumber(), pageable.getPageSize());
 
-        return repository.findAll(pageable)
+        return repository.findByActiveIsTrue(pageable)
                 .map(mapper::toDTO);
     }
 

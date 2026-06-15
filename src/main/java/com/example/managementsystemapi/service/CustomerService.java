@@ -52,7 +52,7 @@ public class CustomerService {
 
         log.info("Fetching customers - page: {}, size: {}", pageable.getPageNumber(), pageable.getPageSize());
 
-        return repository.findAll(pageable)
+        return repository.findByActiveIsTrue(pageable)
                 .map(mapper::toDTO);
     }
 

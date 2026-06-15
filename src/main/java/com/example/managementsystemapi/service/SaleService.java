@@ -77,7 +77,7 @@ public class SaleService {
 
         log.info("Fetching sales - page: {}, size: {}", pageable.getPageNumber(), pageable.getPageSize());
 
-        return repository.findAll(pageable)
+        return repository.findByActiveIsTrue(pageable)
                 .map(mapper::toDTO);
     }
 

@@ -23,6 +23,7 @@ public class ProductRequestDTO {
     private String code;
 
     @NotBlank
+    @Size(max = 255)
     @Schema(description = "Product name", example = "Wireless Mouse")
     private String name;
 
