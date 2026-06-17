@@ -1,6 +1,7 @@
 package com.example.managementsystemapi.controller;
 
 import com.example.managementsystemapi.dto.sale.CreateSaleRequestDTO;
+import com.example.managementsystemapi.dto.sale.SaleDashboardDTO;
 import com.example.managementsystemapi.dto.sale.SaleResponseDTO;
 import com.example.managementsystemapi.service.SaleService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -76,6 +77,16 @@ public class SaleController {
     @PatchMapping("/{id}/cancel")
     public SaleResponseDTO cancel(@PathVariable Long id) {
         return service.cancel(id);
+    }
+
+    @Operation(
+            summary = "Get sales dashboard",
+            description = "Returns aggregated sales metrics: total sales, total revenue and average ticket"
+    )
+    @ApiResponse(responseCode = "200", description = "Dashboard data retrieved successfully")
+    @GetMapping("/dashboard")
+    public ResponseEntity<SaleDashboardDTO> getDashboard() {
+        return ResponseEntity.ok(service.getDashboard());
     }
 
 }

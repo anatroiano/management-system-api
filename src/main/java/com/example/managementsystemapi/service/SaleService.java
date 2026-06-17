@@ -6,6 +6,7 @@ import com.example.managementsystemapi.domain.Sale;
 import com.example.managementsystemapi.domain.SaleItem;
 import com.example.managementsystemapi.dto.sale.CreateSaleItemRequestDTO;
 import com.example.managementsystemapi.dto.sale.CreateSaleRequestDTO;
+import com.example.managementsystemapi.dto.sale.SaleDashboardDTO;
 import com.example.managementsystemapi.dto.sale.SaleResponseDTO;
 import com.example.managementsystemapi.enums.SaleStatus;
 import com.example.managementsystemapi.exception.NotFoundException;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 
@@ -184,6 +186,18 @@ public class SaleService {
                         "Sale canceled"
                 )
         );
+    }
+
+    @Transactional(readOnly = true)
+    public SaleDashboardDTO getDashboard() {
+        long totalSales = repository.countTotalSales();
+        BigDecimal revenue = repository.sumTotalRevenue();
+
+        BigDecimal avgTicket = totalSales == 0
+                ? BigDecimal.ZERO
+                : revenue.divide(BigDecimal.valueOf(totalSales), 2, RoundingMode.HALF_UP);
+
+        return new SaleDashboardDTO(totalSales, revenue, avgTicket);
     }
 
 }
