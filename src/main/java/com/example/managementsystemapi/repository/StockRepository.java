@@ -20,4 +20,13 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
     @Query("SELECT s FROM Stock s WHERE s.product.id = :productId")
     Optional<Stock> findByProductIdForUpdate(Long productId);
 
+    @Query("SELECT COUNT(s) FROM Stock s WHERE s.active = true")
+    long countActive();
+
+    @Query("SELECT COUNT(s) FROM Stock s WHERE s.active = true AND s.quantity > 0 AND s.quantity < 100")
+    long countLowStock();
+
+    @Query("SELECT COUNT(s) FROM Stock s WHERE s.active = true AND s.quantity = 0")
+    long countOutOfStock();
+
 }

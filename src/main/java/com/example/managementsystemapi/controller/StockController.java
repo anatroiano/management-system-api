@@ -116,4 +116,14 @@ public class StockController {
         return ResponseEntity.ok(service.findAll(pageable));
     }
 
+    @Operation(
+            summary = "Get stock dashboard",
+            description = "Returns aggregated stock metrics: active stocks, low quantity (< 100), and out of stock"
+    )
+    @ApiResponse(responseCode = "200", description = "Dashboard data retrieved successfully")
+    @GetMapping("/dashboard")
+    public ResponseEntity<StockDashboardDTO> getDashboard() {
+        return ResponseEntity.ok(service.getDashboard());
+    }
+
 }

@@ -3,10 +3,7 @@ package com.example.managementsystemapi.service;
 import com.example.managementsystemapi.domain.Product;
 import com.example.managementsystemapi.domain.Stock;
 import com.example.managementsystemapi.domain.StockMovement;
-import com.example.managementsystemapi.dto.stock.StockEntryRequestDTO;
-import com.example.managementsystemapi.dto.stock.StockExitRequestDTO;
-import com.example.managementsystemapi.dto.stock.StockMovementResponseDTO;
-import com.example.managementsystemapi.dto.stock.StockResponseDTO;
+import com.example.managementsystemapi.dto.stock.*;
 import com.example.managementsystemapi.enums.MovementType;
 import com.example.managementsystemapi.exception.NotFoundException;
 import com.example.managementsystemapi.mapper.StockMapper;
@@ -184,5 +181,14 @@ public class StockService {
 
         return repository.findByActiveIsTrue(pageable)
                 .map(mapper::toDTO);
+    }
+
+    @Transactional(readOnly = true)
+    public StockDashboardDTO getDashboard() {
+        long totalActive = repository.countActive();
+        long totalLowStock = repository.countLowStock();
+        long totalOutOfStock = repository.countOutOfStock();
+
+        return new StockDashboardDTO(totalActive, totalLowStock, totalOutOfStock);
     }
 }
