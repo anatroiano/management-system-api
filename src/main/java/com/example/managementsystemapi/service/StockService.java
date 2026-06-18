@@ -48,6 +48,18 @@ public class StockService {
                 });
     }
 
+    private Stock findOrCreateStock(Long productId, MovementType type) {
+        return repository.findByProductIdForUpdate(productId)
+                .orElseGet(() -> {
+                    if (type != MovementType.ENTRY) {
+                        throw new NotFoundException("Stock not found for product id: " + productId);
+                    }
+                    log.info("Stock not found, creating new stock - productId: {}", productId);
+                    Product product = productService.findOrThrow(productId);
+                    return repository.save(Stock.createFor(product));
+                });
+    }
+
     @Transactional(readOnly = true)
     public StockResponseDTO getByProduct(Long productId) {
 
@@ -135,7 +147,7 @@ public class StockService {
 
         Product product = productService.findOrThrow(productId);
 
-        Stock stock = findStockForUpdateOrThrow(productId);
+        Stock stock = findOrCreateStock(productId, type);
 
         applyStockChange(stock, type, quantity);
 
@@ -161,14 +173,6 @@ public class StockService {
     private Stock findStockOrThrow(Long productId) {
 
         return repository.findByProductId(productId)
-                .orElseThrow(() -> new NotFoundException(
-                        "Stock not found for product id: " + productId
-                ));
-    }
-
-    private Stock findStockForUpdateOrThrow(Long productId) {
-
-        return repository.findByProductIdForUpdate(productId)
                 .orElseThrow(() -> new NotFoundException(
                         "Stock not found for product id: " + productId
                 ));
