@@ -1,5 +1,6 @@
 package com.example.managementsystemapi.exception;
 
+import com.example.managementsystemapi.enums.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,5 +18,6 @@ public class ApiError {
     private String error;
     private String message;
     private LocalDateTime timestamp;
+    private ErrorCode code;
 
 }

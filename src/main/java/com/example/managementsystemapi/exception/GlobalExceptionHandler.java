@@ -1,5 +1,6 @@
 package com.example.managementsystemapi.exception;
 
+import com.example.managementsystemapi.enums.ErrorCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,7 +20,8 @@ public class GlobalExceptionHandler {
                 HttpStatus.NOT_FOUND.value(),
                 "Not Found",
                 ex.getMessage(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                ErrorCode.NOT_FOUND
         );
     }
 
@@ -37,7 +39,8 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 "Bad Request",
                 message,
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                ErrorCode.VALIDATION_ERROR
         );
     }
 
@@ -49,7 +52,8 @@ public class GlobalExceptionHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Internal Server Error",
                 ex.getMessage(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                ErrorCode.INTERNAL_ERROR
         );
     }
 
@@ -61,7 +65,8 @@ public class GlobalExceptionHandler {
                 HttpStatus.UNPROCESSABLE_CONTENT.value(),
                 "Insufficient stock",
                 ex.getMessage(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                ErrorCode.INSUFFICIENT_STOCK
         );
     }
 
@@ -73,7 +78,8 @@ public class GlobalExceptionHandler {
                 HttpStatus.CONFLICT.value(),
                 "Stock locked",
                 "Stock was modified by another request. Please retry.",
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                ErrorCode.STOCK_LOCKED
         );
     }
 
@@ -85,7 +91,8 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 "Business rule violation",
                 ex.getMessage(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                ErrorCode.BUSINESS_RULE_VIOLATION
         );
     }
 }
