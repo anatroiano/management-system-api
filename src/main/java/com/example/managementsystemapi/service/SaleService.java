@@ -190,7 +190,7 @@ public class SaleService {
 
     @Transactional(readOnly = true)
     public SaleDashboardDTO getDashboard() {
-        long totalSales = repository.countTotalSales();
+        long totalSales = repository.countByActiveIsTrue();
         BigDecimal revenue = repository.sumTotalRevenue();
 
         BigDecimal avgTicket = totalSales == 0
