@@ -17,10 +17,9 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
 
     Page<Sale> findByActiveIsTrue(Pageable pageable);
 
-    @Query("SELECT COUNT(s) FROM Sale s")
-    long countTotalSales();
+    long countByActiveIsTrue();
 
-    @Query("SELECT COALESCE(SUM(s.totalAmount), 0) FROM Sale s")
+    @Query("SELECT COALESCE(SUM(s.totalAmount), 0) FROM Sale s WHERE s.active = true AND s.status != 'CANCELED'")
     BigDecimal sumTotalRevenue();
 
     @Query("SELECT COUNT(s) FROM Sale s WHERE s.active = true AND s.status != 'CANCELED' AND s.createdAt >= :startDate AND s.createdAt < :endDate")
