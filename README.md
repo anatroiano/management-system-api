@@ -14,6 +14,7 @@ O projeto foi desenvolvido com foco em boas práticas REST, regras de negócio, 
 - Controle de estoque
 - Atualização automática do estoque após vendas
 - Cancelamento de vendas com restauração de estoque
+- Dashboard para acompanhamento das vendas e estoque
 - Autenticação com JWT
 - Paginação de endpoints
 - Documentação com Swagger/OpenAPI
@@ -43,6 +44,8 @@ O projeto segue arquitetura em camadas:
 Controller -> Service -> Repository -> Database
 ```
 
+---
+
 ## ▶️ Como executar o projeto
 
 ### Pré-requisitos
@@ -63,15 +66,11 @@ spring.datasource.username=postgres
 spring.datasource.password=sua_senha
 ```
 
----
-
 ### Executar aplicação
 
 ```bash
 mvn spring-boot:run
 ```
-
----
 
 ### Executar testes
 
@@ -89,12 +88,19 @@ Disponível em:
 http://localhost:8080/swagger-ui/index.html
 ```
 
+---
+
+## 🖥️ Frontend
+
+O frontend da aplicação está disponível no
+repositório: [GestãoPro — Frontend](https://github.com/anatroiano/management-system-web)
+
+---
+
 ## 🚀 Próximos passos
 
-- Desenvolvimento do front-end com Angular
 - Dockerização da aplicação
 - Pipeline CI/CD
-- Dashboard e relatórios
 
 ---
 
