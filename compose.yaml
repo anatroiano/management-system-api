@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgres:18.0
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - db-volume:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    image: management-system-api
+    container_name: management-system-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+
+volumes:
+  db-volume:

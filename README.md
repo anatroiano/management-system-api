@@ -33,12 +33,14 @@ O projeto foi desenvolvido com foco em boas práticas REST, regras de negócio, 
 - Swagger/OpenAPI
 - JUnit 5 + Mockito
 - Lombok
+- Docker
+- Docker Compose
 
 ---
 
 ## 🏗️ Arquitetura
 
-O projeto segue arquitetura em camadas:
+O projeto segue uma arquitetura em camadas:
 
 ```txt
 Controller -> Service -> Repository -> Database
@@ -46,45 +48,61 @@ Controller -> Service -> Repository -> Database
 
 ---
 
-## ▶️ Como executar o projeto
+## 🐳 Como executar
 
 ### Pré-requisitos
 
-- Java 21+
-- Maven
-- PostgreSQL
+* Docker
+* Docker Compose
+
+### Configuração
+
+Copie o arquivo `.env.example` para `.env`:
+
+```bash
+cp .env.example .env
+```
+
+Em seguida, edite o arquivo .env e configure os valores das variáveis de ambiente.
+
+### Execução
+
+Para executar a aplicação:
+
+```bash
+docker compose up --build
+```
+
+> Use `--build` na primeira execução e sempre que alterar o código-fonte, o `pom.xml` ou o `Dockerfile`. Nas demais,
+> utilize apenas:
+> ```bash
+> docker compose up
+> ```
+
+Para executar o ambiente de desenvolvimento:
+
+```bash
+docker compose -f compose-dev.yaml up --build
+```
+
+> Use `--build` apenas na primeira execução ou ao alterar o `pom.xml`/`Dockerfile-dev`. Nas demais:
+> ```bash
+> docker compose -f compose-dev.yaml up
+> ```
+
+A API estará disponível em:
+
+```text
+http://localhost:8080
+```
 
 ---
 
-### Configuração do banco
+## 📚 Swagger / OpenAPI
 
-Configure o `application.properties`:
+Com a aplicação em execução:
 
-```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/management_system
-spring.datasource.username=postgres
-spring.datasource.password=sua_senha
-```
-
-### Executar aplicação
-
-```bash
-mvn spring-boot:run
-```
-
-### Executar testes
-
-```bash
-mvn test
-```
-
----
-
-## 📚 Swagger
-
-Disponível em:
-
-```txt
+```text
 http://localhost:8080/swagger-ui/index.html
 ```
 
@@ -94,13 +112,6 @@ http://localhost:8080/swagger-ui/index.html
 
 O frontend da aplicação está disponível no
 repositório: [GestãoPro — Frontend](https://github.com/anatroiano/management-system-web)
-
----
-
-## 🚀 Próximos passos
-
-- Dockerização da aplicação
-- Pipeline CI/CD
 
 ---
 
